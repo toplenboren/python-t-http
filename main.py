@@ -3,19 +3,8 @@ import sys
 
 import utilitary
 
-
-class Request():
-    def __init__(self, srvaddr, port, size):
-        self.content = self.socket.recv(size)
-        self.server_addr = srvaddr
-        self.port = port
-        self.socket = socket.socket()
-        self.socket.connect((srvaddr, port))
-        # self.request_header = 'GET / HTTP/1.0\r\nHost:'+ srvaddr +'\r\n\r\n'
-
-    # todo: do encoding
-    def send(self, request):
-        self.socket.send(bytes(request, encoding='UTF-8', errors='strict'))
+ENCODINGS = ['utf-8', 'utf-16', 'Windows-1251']
+ENCODING = 'utf-8'
 
 
 def launch_utilitary_function():
@@ -34,28 +23,57 @@ def launch_utilitary_function():
     return False
 
 
+def write_to_html(data, header):
+    f = open(header + '.html', "w+", encoding=ENCODING)
+    f.write(data)
+    f.close()
+
+
 def http_client():
 
-    request = Request(srvaddr='kadm.imkn.urfu.ru', port=80, size=1024, request=)
-    request.content
+    print('building up your Request, hold on...')
+    print('please enter the requested html page: *kadm.imkn.urfu.ru/news.php')
+
+    inp = input()
+    inp = inp.split('/')
+    host = inp[0]
+    addr = "/" + "/".join(inp[1::])
 
     sock = socket.socket()
-    sock.connect(('kadm.imkn.urfu.ru', 80))
+    sock.connect((host, 80))
+    request_header = 'GET ' + addr + ' HTTP/1.0\r\nHost: ' + host + ' \r\n\r\n'
 
-    request_header = 'GET / HTTP/1.0\r\nHost: kadm.imkn.urfu.ru\r\n\r\n'
-    sock.send(bytes(request_header, encoding='UTF-8', errors='strict'))
-
-    data = sock.recv(1024)
+    sock.send(bytes(request_header, encoding='utf-8', errors='strict'))
+    data = sock.recv(10000)
     sock.close()
 
-    print(str(data))
+    for enc in ENCODINGS:
+        try:
+            data_dec = data.decode(enc)
+            data_enc = data_dec
+            ENCODING = enc
+        except Exception:
+            continue
+
+    print('output')
+    print(str(data_enc))
+    print('save?')
+    print('y/N')
+    save = input()
+    if save == 'y':
+        write_to_html(str(data_enc), host)
+        return
+    else:
+        print(':(')
+        return
 
 
 def main():
-    if not launch_utilitary_function():
-        http_client()
-    else:
-        return
+    # if not launch_utilitary_function():
+    #     http_client()
+    # else:
+    #     return
+    http_client()
 
 
 if __name__ == '__main__':
