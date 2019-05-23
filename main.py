@@ -23,7 +23,7 @@ def launch_utilitary_function():
 
 
 def write_to_html(data, header):
-    f = open(header + '.html', "w+", encoding='Windows-1251')
+    f = open(header + '.html', "w+", encoding='utf-8')
     f.write(data)
     f.close()
 
