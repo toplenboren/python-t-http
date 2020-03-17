@@ -1,5 +1,5 @@
 def print_usage():
-    print("Usage: python3 main.py launch")
+    print("Usage: python3 main_old.py launch")
     print("-h or --help for additional info")
 
 
