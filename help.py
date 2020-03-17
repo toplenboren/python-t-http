@@ -1,4 +1,4 @@
-"""Module is holding helping string"""
+"""Module is holding helping strings"""
 
 ARGUMENTS_PARSING = {
     'address': 'What do you want to fetch?',
@@ -6,11 +6,11 @@ ARGUMENTS_PARSING = {
     'method': 'Custom method for request, POST, GET, OPTIONS are supported',
     'timeout': 'Timeout for request',
     'body': 'Custom body for request,'
-            ' supports only JSON, use like this: {argument:value, argument2:value2} or specify a path',
+            ' supports only JSON, use like this: arg=value,arg2=value2',
     'header': 'Custom headers for request,'
-            ' supports only JSON, use like this: {argument:value, argument2:value2} or specify a path',
+            ' supports only JSON, use like this: arg=value,arg2=value2',
 }
 
 HELP_MISC = {
-    'description':'Fetch them'
+    'description': 'Fetch them'
 }

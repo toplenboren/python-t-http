@@ -1,10 +1,19 @@
 import argparse
-from client import http_client
+from client import HttpClient
 from help import ARGUMENTS_PARSING, HELP_MISC
 
 
 def setup_arg_parser():
     parser = argparse.ArgumentParser(description=HELP_MISC['description'])
+
+    class store_dict_key_pair(argparse.Action):
+        def __call__(self, parser, namespace, values, option_string=None):
+            my_dict = {}
+            for kv in values.split(","):
+                k, v = kv.split("=")
+                my_dict[k] = v
+            setattr(namespace, self.dest, my_dict)
+
     parser.add_argument('address',
                         type=str,
                         nargs='+',
@@ -27,12 +36,12 @@ def setup_arg_parser():
                         )
     parser.add_argument('-body',
                         metavar='-b',
-                        type=dict,
+                        action=store_dict_key_pair,
                         help=ARGUMENTS_PARSING['body']
                         )
-    parser.add_argument('-header',
-                        metavar='-h',
-                        type=dict,
+    parser.add_argument('-headers',
+                        metavar='-he',
+                        action=store_dict_key_pair,
                         help=ARGUMENTS_PARSING['header']
                         )
     return parser
@@ -41,7 +50,8 @@ def setup_arg_parser():
 def main():
     parser = setup_arg_parser()
     args = parser.parse_args()
-    client = http_client(vars(args))
+    print(vars(args))
+    client = HttpClient(vars(args))
     client.fire()
 
 
