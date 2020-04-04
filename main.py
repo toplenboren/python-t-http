@@ -1,12 +1,22 @@
+"""
+Main guy, gets Arguments and returns Result either printed on console or to the output arg
+"""
+
 import argparse
-from client import HttpClient
+from http_client.client import HttpClient
 from help import ARGUMENTS_PARSING, HELP_MISC
 
 
 def setup_arg_parser():
+    """
+    Sets up arguments parser
+    """
     parser = argparse.ArgumentParser(description=HELP_MISC['description'])
 
     class store_dict_key_pair(argparse.Action):
+        """
+        Gives Argparser an ability to store POST attrs
+        """
         def __call__(self, parser, namespace, values, option_string=None):
             my_dict = {}
             for kv in values.split(","):
@@ -50,7 +60,6 @@ def setup_arg_parser():
 def main():
     parser = setup_arg_parser()
     args = parser.parse_args()
-    print(vars(args))
     client = HttpClient(vars(args))
     client.fire()
 
