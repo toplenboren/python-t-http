@@ -25,9 +25,7 @@ def setup_arg_parser():
                 my_dict[k] = v
             setattr(namespace, self.dest, my_dict)
 
-    parser.add_argument(
-        "address", type=str, help=ARGUMENTS_PARSING["address"]
-    )
+    parser.add_argument("address", type=str, help=ARGUMENTS_PARSING["address"])
     parser.add_argument(
         "-output", metavar="-o", type=str, help=ARGUMENTS_PARSING["output"]
     )
@@ -55,6 +53,7 @@ def setup_arg_parser():
 def main():
     parser = setup_arg_parser()
     args = parser.parse_args()
+    print(vars(args))
     client = HttpClient(vars(args))
     client.fire()
 

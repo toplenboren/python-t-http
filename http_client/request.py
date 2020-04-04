@@ -39,11 +39,15 @@ class HttpRequest:
             self.method, "/" + self.addr.path, HTTP_VERSION_HEADER
         )
         arbitrary_headers = {"Host": self.addr.host}
-        compiled_headers_dict = {**arbitrary_headers, **self.headers}
-        headers = self.compile_request_from_dict(compiled_headers_dict)
         body = ""
         if self.method in METHODS_WITH_BODY:
             body = self.compile_request_from_dict(self.body)
+            arbitrary_headers["Content-Type"] = "application/json"
+            arbitrary_headers["Content-Length"] = str(len(body))
+        compiled_headers_dict = {**arbitrary_headers, **self.headers}
+        headers = self.compile_request_from_dict(compiled_headers_dict)
+
         request = request_line + "\r\n" + headers + "\r\n" + body
 
+        print(request)
         return request

@@ -16,7 +16,7 @@ class HttpClient:
 
         if is_valid("output") and check_output_file(kwargs["output"]):
             self.output = kwargs["output"]
-        if is_valid("method") in kwargs and HttpRequest.method_is_ok(kwargs["method"]):
+        if is_valid("method") and HttpRequest.method_is_ok(kwargs["method"]):
             self.rq.method = kwargs["method"]
         if is_valid("timeout"):
             self.timeout = kwargs["timeout"]
