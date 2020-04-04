@@ -36,6 +36,7 @@ def setup_socket(addr: Address, request: str, timeout: int):
 def fetch(addr: Address, request: str, timeout: int) -> Response:
     s = setup_socket(addr, request, timeout)
     response = Response(s)
+    response.receive_response()
     if 200 <= response.status < 400:
         return response
     else:

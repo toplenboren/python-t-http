@@ -20,7 +20,6 @@ class Response:
         self.status = 0
         self.encoding = "utf-8"
         self.body_length = 0
-        self.receive_response()
 
     def receive_response(self):
         self.forge_status_code()
@@ -59,7 +58,7 @@ class Response:
         else:
             raise Exception("Content-Length header was not present!")
         if "Content-Type" in self.headers.keys():
-            for prop in self.headers["Content-Type"].split(";")[1:]:
+            for prop in self.headers["Content-Type"].split("; ")[1:]:
                 prop_name, value = prop.split("=")
                 if prop_name == "charset":
                     self.encoding = value

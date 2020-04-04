@@ -31,7 +31,7 @@ class HttpRequest:
     def compile_request_from_dict(request_props: dict) -> str:
         msg_array = []
         for key in request_props:
-            msg_array.append(str(key) + ":" + str(request_props[key] + "\r\n"))
+            msg_array.append(str(key) + ": " + str(request_props[key] + "\r\n"))
         return "".join(msg_array)
 
     def compile(self) -> str:
