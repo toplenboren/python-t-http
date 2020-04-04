@@ -5,15 +5,15 @@ This file contains additional logic to the socket method — Readline and ReadSe
 import socket
 from typing import List
 
-CONTINUATION = b'\r\n'
-BREAK = b'\r\n\r\n'
+CONTINUATION = b"\r\n"
+BREAK = b"\r\n\r\n"
 
 
 def socket_readline(self: socket) -> bytes:
     """
     Gets all data before \r\n
     """
-    data = [b'']
+    data = [b""]
 
     while True:
         chunk = self.recv(1)
@@ -22,19 +22,19 @@ def socket_readline(self: socket) -> bytes:
             break
         data.append(chunk)
 
-    return b''.join(data)
+    return b"".join(data)
 
 
 def socket_read_section(self: socket) -> List[bytes]:
     """
     Gets all data before \r\n\r\n
     """
-    data = [b'', b'', b'', b'']
+    data = [b"", b"", b"", b""]
 
     while True:
         chunk = socket_readline(self)
         data.append(chunk)
-        if b''.join(data[-2:])[-4:] == BREAK:
+        if b"".join(data[-2:])[-4:] == BREAK:
             break
 
     return data

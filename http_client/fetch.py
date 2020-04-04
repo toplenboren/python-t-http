@@ -22,12 +22,12 @@ def setup_socket(addr: Address, request: str, timeout: int):
     """
     Prepares a socket according to user settings
     """
-    https = addr.protocol == 'https://'
+    https = addr.protocol == "https://"
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((addr.host, resolve_port(https)))
     if https:
         s = ssl.wrap_socket(s)
-    s.sendall(bytes(request, encoding='utf-8'))
+    s.sendall(bytes(request, encoding="utf-8"))
     s.settimeout(timeout)
 
     return s
@@ -39,4 +39,7 @@ def fetch(addr: Address, request: str, timeout: int) -> Response:
     if 200 <= response.status < 400:
         return response
     else:
-        raise Exception("The response returned with an error-indicating status code:", response.status)
+        raise Exception(
+            "The response returned with an error-indicating status code:",
+            response.status,
+        )

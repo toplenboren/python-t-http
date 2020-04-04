@@ -4,7 +4,7 @@ from typing import List
 
 from http_client.socket_extensions import socket_read_section, socket_readline
 
-DEFAULT_ENCODING = 'utf-8'
+DEFAULT_ENCODING = "utf-8"
 
 
 class Response:
@@ -16,9 +16,9 @@ class Response:
     def __init__(self, sock: socket):
         self.socket = sock
         self.headers = {}
-        self.body = ''
+        self.body = ""
         self.status = 0
-        self.encoding = 'utf-8'
+        self.encoding = "utf-8"
         self.body_length = 0
         self.receive_response()
 
@@ -32,7 +32,9 @@ class Response:
         self.parse_status_code(data)
 
     def parse_status_code(self, status_data_line: bytes):
-        status_code_candidate = re.search(r"\d{3,}", status_data_line.decode(DEFAULT_ENCODING))
+        status_code_candidate = re.search(
+            r"\d{3,}", status_data_line.decode(DEFAULT_ENCODING)
+        )
         status_code_candidate = status_code_candidate.group()
         if status_code_candidate is None:
             raise Exception("Status code unknown, wrong server response")
@@ -46,20 +48,20 @@ class Response:
     def parse_headers(self, header_data_lines: List[bytes]):
         for line in header_data_lines:
             decoded_line = line.decode(DEFAULT_ENCODING)
-            header = decoded_line.split(': ')
+            header = decoded_line.split(": ")
             if len(header) < 2:
                 continue
             else:
-                self.headers[header[0]] = header[1].replace('\r\n', '')
+                self.headers[header[0]] = header[1].replace("\r\n", "")
 
         if "Content-Length" in self.headers.keys():
             self.body_length = int(self.headers["Content-Length"])
         else:
             raise Exception("Content-Length header was not present!")
         if "Content-Type" in self.headers.keys():
-            for prop in self.headers["Content-Type"].split(';')[1:]:
-                prop_name, value = prop.split('=')
-                if prop_name == 'charset':
+            for prop in self.headers["Content-Type"].split(";")[1:]:
+                prop_name, value = prop.split("=")
+                if prop_name == "charset":
                     self.encoding = value
         else:
             self.encoding = DEFAULT_ENCODING
