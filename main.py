@@ -26,7 +26,7 @@ def setup_arg_parser():
             setattr(namespace, self.dest, my_dict)
 
     parser.add_argument(
-        "address", type=str, nargs="+", help=ARGUMENTS_PARSING["address"]
+        "address", type=str, help=ARGUMENTS_PARSING["address"]
     )
     parser.add_argument(
         "-output", metavar="-o", type=str, help=ARGUMENTS_PARSING["output"]

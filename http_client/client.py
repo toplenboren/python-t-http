@@ -5,7 +5,7 @@ from http_client.fetch import fetch
 
 class HttpClient:
     def __init__(self, kwargs: dict):
-        self.rq = HttpRequest(*kwargs["address"])
+        self.rq = HttpRequest(kwargs["address"])
         self.output = None
         self.timeout = 2
         self.process_options(kwargs)
@@ -30,4 +30,5 @@ class HttpClient:
         Gets the response and writes it to the output
         """
         response = fetch(self.rq.addr, self.rq.compile(), self.timeout)
+        self.last_response = response
         outprint(self.output, response)

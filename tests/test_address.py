@@ -11,11 +11,10 @@ class AddressTest(unittest.TestCase):
         self.assertEqual(Address.parse(addr_without_path), ('http://', 'host.com', ''))
         self.assertEqual(Address.parse(short_address), ('http://', 'a.b', ''))
 
-    def test_incorrct_address_parsing(self):
+    def test_incorrect_address_parsing(self):
         bad_short_address = 'http:/a.b'
         with self.assertRaises(Exception):
             Address.parse(bad_short_address)
-
 
     def test_address_init(self):
         addr_example = 'https://github.com/user/toplenboren'

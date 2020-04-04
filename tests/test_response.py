@@ -16,5 +16,13 @@ class RequestTest(unittest.TestCase):
         self.assertEqual(resp.encoding, 'UTF-16')
 
 
+    def test_response_status_parsing(self):
+        s = socket.socket()
+        resp = Response(s)
+        resp.parse_status_code(b'HTTP 1/1 200 OK')
+
+        self.assertEqual(resp.status, 200)
+
+
 if __name__ == '__main__':
     unittest.main()
