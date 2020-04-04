@@ -1,17 +1,14 @@
-"""
-- Main guy, gets ARGUMENTS and returns RESULT
-"""
-from io_handler import prepare_output_file
-from http_request import HttpRequest
-from fetch import fetch
+from http_client.io_handler import check_output_file, outprint
+from http_client.request import HttpRequest
+from http_client.fetch import fetch
 
 
 class HttpClient:
 
     def __init__(self, kwargs: dict):
         self.rq = HttpRequest(*kwargs['address'])
-        self.output = 'stdout'
-        self.timeout = 30
+        self.output = None
+        self.timeout = 2
         self.process_options(kwargs)
 
     def process_options(self, kwargs: dict):
@@ -19,8 +16,8 @@ class HttpClient:
         def is_valid(arg: str) -> bool:
             return arg in kwargs and kwargs[arg] is not None
 
-        if is_valid('output'):
-            self.output = prepare_output_file(kwargs['output'])
+        if is_valid('output') and check_output_file(kwargs['output']):
+            self.output = kwargs['output']
         if is_valid('method') in kwargs and HttpRequest.method_is_ok(kwargs['method']):
             self.rq.method = kwargs['method']
         if is_valid('timeout'):
@@ -31,6 +28,8 @@ class HttpClient:
             self.rq.headers = kwargs['headers']
 
     def fire(self):
-        compiled_request = self.rq.compile()
-        outstream = fetch(self.rq.addr, compiled_request)
-        print(outstream)
+        """
+        Gets the response and writes it to the output
+        """
+        response = fetch(self.rq.addr, self.rq.compile(), self.timeout)
+        outprint(self.output, response)
