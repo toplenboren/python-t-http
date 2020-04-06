@@ -1,3 +1,5 @@
+[![Coverage Status](https://coveralls.io/repos/github/toplenboren/python-t-http/badge.svg?branch=master)](https://coveralls.io/github/toplenboren/python-t-http?branch=master)
+
 # python-t-http
 A simple console http client, that was made during my time at the Uni
 
