@@ -53,7 +53,6 @@ def setup_arg_parser():
 def main():
     parser = setup_arg_parser()
     args = parser.parse_args()
-    print(vars(args))
     client = HttpClient(vars(args))
     client.fire()
 
