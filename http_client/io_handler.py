@@ -33,7 +33,7 @@ def outprint_to_file(file_path: str, resp: Response) -> None:
     """
     Prints a simplified output to the IO context
     """
-    with open(file_path, "w+") as f:
+    with open(file_path, "w+", encoding=resp.encoding) as f:
         f.write(resp.body)
 
 

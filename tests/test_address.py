@@ -26,6 +26,13 @@ class AddressTest(unittest.TestCase):
         self.assertEqual("https://", addr_obj.protocol)
         self.assertEqual("user/toplenboren", addr_obj.path)
 
+    def test_address_multidomain(self):
+        addr_example = "https://kadm.urfu.ru/index"
+        addr_obj = Address(addr_example)
+        self.assertEqual("kadm.urfu.ru", addr_obj.host)
+        self.assertEqual("https://", addr_obj.protocol)
+        self.assertEqual("index", addr_obj.path)
+
 
 if __name__ == "__main__":
     unittest.main()
