@@ -4,6 +4,7 @@ Prepare a socket and forge Response class
 
 import ssl
 import socket
+from typing import Callable
 
 from http_client.request import Address
 from http_client.response import Response
@@ -33,10 +34,13 @@ def setup_socket(addr: Address, request: str, timeout: int):
     return s
 
 
-def fetch(addr: Address, request: str, timeout: int) -> Response:
+def fetch(addr: Address, request: str, timeout: int, callback: Callable) -> Response:
+    """
+    Receives the response, progress callback should be lambda which accepts percentage (as float) and returns void
+    """
     s = setup_socket(addr, request, timeout)
     response = Response(s)
-    response.receive_response()
+    response.receive_response(callback)
     if 200 <= response.status < 400:
         return response
     else:

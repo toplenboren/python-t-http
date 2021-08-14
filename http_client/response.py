@@ -1,3 +1,4 @@
+import math
 import re
 from socket import socket
 from typing import List
@@ -5,6 +6,7 @@ from typing import List
 from http_client.socket_extensions import socket_read_section, socket_readline
 
 DEFAULT_ENCODING = "utf-8"
+BUFFER = 10 # buffer in bytes
 
 
 class Response:
@@ -16,15 +18,17 @@ class Response:
     def __init__(self, sock: socket):
         self.socket = sock
         self.headers = {}
-        self.body = ""
+        self.raw_body = b''
+        self.body = ''
         self.status = 0
         self.encoding = "utf-8"
         self.body_length = 0
+        self.received = 0
 
-    def receive_response(self):
+    def receive_response(self, progress_callback):
         self.forge_status_code()
         self.forge_headers()
-        self.forge_body()
+        self.forge_body(progress_callback)
 
     def forge_status_code(self):
         data = socket_readline(self.socket)
@@ -65,6 +69,16 @@ class Response:
         else:
             self.encoding = DEFAULT_ENCODING
 
-    def forge_body(self):
-        data = self.socket.recv(self.body_length)
-        self.body = data.decode(self.encoding)
+    def forge_body(self, progress_callback):
+        full_response_received = False
+
+        while not full_response_received:
+            to_receive = min(BUFFER, self.body_length - self.received)
+            data = self.socket.recv(to_receive)
+            self.raw_body += data
+            self.received += to_receive
+            progress_callback(self.received / self.body_length)
+            if self.received >= self.body_length:
+                full_response_received = True
+
+        self.body = self.raw_body.decode(self.encoding)

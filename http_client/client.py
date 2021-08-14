@@ -29,6 +29,6 @@ class HttpClient:
         """
         Gets the response and writes it to the output
         """
-        response = fetch(self.rq.addr, self.rq.compile(), self.timeout)
+        response = fetch(self.rq.addr, self.rq.compile(), self.timeout, lambda x: print(x))
         self.last_response = response
         outprint(self.output, response)
