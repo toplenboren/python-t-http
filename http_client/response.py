@@ -48,15 +48,6 @@ class Response:
     def forge_headers(self):
         section = socket_read_section(self.socket)
         self.parse_headers(section)
-        content_type_header = self.headers.get('Content-Type', None),
-        content_type_header = content_type_header[0]
-        if content_type_header is not None:
-            content_type_header = content_type_header.split('; ')
-            for piece in content_type_header:
-                if 'charset' in piece:
-                    piece = piece.split('=')
-                    if len(piece) == 2:
-                        self.response_encoding = piece[-1]
 
     def parse_headers(self, header_data_lines: List[bytes]):
         for line in header_data_lines:
@@ -67,18 +58,16 @@ class Response:
             else:
                 self.headers[header[0]] = header[1].replace("\r\n", "")
 
-
         if "Content-Length" in self.headers.keys():
             self.body_length = int(self.headers["Content-Length"])
         else:
             raise Exception("Content-Length header was not present!")
+
         if "Content-Type" in self.headers.keys():
             for prop in self.headers["Content-Type"].split("; ")[1:]:
                 prop_name, value = prop.split("=")
                 if prop_name == "charset":
-                    self.encoding = value
-        else:
-            self.encoding = DEFAULT_ENCODING
+                    self.response_encoding = value
 
     def forge_body(self, progress_callback):
         full_response_received = False
