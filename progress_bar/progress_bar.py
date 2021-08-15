@@ -1,7 +1,7 @@
 import time
 from time import sleep
 
-from progress.bar import Bar
+from progress.bar import ShadyBar
 
 class ProgressBar:
     def __init__(self):
@@ -10,8 +10,7 @@ class ProgressBar:
         self.bar = None
 
     def start(self):
-        print('')
-        self.bar = Bar('Downloading', max=self.max)
+        self.bar = ShadyBar('Downloading:', max=self.max)
 
     def set(self, percentage):
         percentage = int(percentage)
@@ -21,3 +20,4 @@ class ProgressBar:
 
     def finish(self):
         self.bar.finish()
+        print('')

@@ -6,7 +6,7 @@ from http_client.fetch import fetch
 class HttpClient:
     def __init__(self, arguments: dict, **kwargs):
         self.rq = HttpRequest(arguments["address"])
-        self.progress_bar = kwargs.get('progress_bar')
+        self.progress_bar = kwargs.get('progress_bar', None)
         self.output = None
         self.timeout = 2
         self.process_options(arguments)
@@ -30,8 +30,11 @@ class HttpClient:
         """
         Gets the response and writes it to the output
         """
-        self.progress_bar.start()
-        response = fetch(self.rq.addr, self.rq.compile(), self.timeout, lambda x: self.progress_bar.set(x))
-        self.progress_bar.finish()
+        if self.progress_bar:
+            self.progress_bar.start()
+            response = fetch(self.rq.addr, self.rq.compile(), self.timeout, lambda x: self.progress_bar.set(x))
+            self.progress_bar.finish()
+        else:
+            response = fetch(self.rq.addr, self.rq.compile(), self.timeout, lambda x: print(x))
         self.last_response = response
         outprint(self.output, response)
