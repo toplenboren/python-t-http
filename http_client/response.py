@@ -6,7 +6,7 @@ from typing import List
 from http_client.socket_extensions import socket_read_section, socket_readline
 
 DEFAULT_ENCODING = "utf-8"
-BUFFER = 10 # buffer in bytes
+BUFFER = 512 # buffer in bytes
 
 
 class Response:
@@ -21,7 +21,8 @@ class Response:
         self.raw_body = b''
         self.body = ''
         self.status = 0
-        self.encoding = "utf-8"
+        self.encoding = DEFAULT_ENCODING
+        self.response_encoding = None
         self.body_length = 0
         self.received = 0
 
@@ -47,6 +48,15 @@ class Response:
     def forge_headers(self):
         section = socket_read_section(self.socket)
         self.parse_headers(section)
+        content_type_header = self.headers.get('Content-Type', None),
+        content_type_header = content_type_header[0]
+        if content_type_header is not None:
+            content_type_header = content_type_header.split('; ')
+            for piece in content_type_header:
+                if 'charset' in piece:
+                    piece = piece.split('=')
+                    if len(piece) == 2:
+                        self.response_encoding = piece[-1]
 
     def parse_headers(self, header_data_lines: List[bytes]):
         for line in header_data_lines:
@@ -56,6 +66,7 @@ class Response:
                 continue
             else:
                 self.headers[header[0]] = header[1].replace("\r\n", "")
+
 
         if "Content-Length" in self.headers.keys():
             self.body_length = int(self.headers["Content-Length"])
@@ -77,8 +88,11 @@ class Response:
             data = self.socket.recv(to_receive)
             self.raw_body += data
             self.received += to_receive
-            progress_callback(self.received / self.body_length)
+            progress_callback(self.received / self.body_length * 100)
             if self.received >= self.body_length:
                 full_response_received = True
 
-        self.body = self.raw_body.decode(self.encoding)
+        if self.response_encoding is not None:
+            self.body = self.raw_body.decode(self.response_encoding)
+        else:
+            self.body = self.raw_body

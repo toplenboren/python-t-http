@@ -33,8 +33,14 @@ def outprint_to_file(file_path: str, resp: Response) -> None:
     """
     Prints a simplified output to the IO context
     """
-    with open(file_path, "w+", encoding=resp.encoding) as f:
-        f.write(resp.body)
+    # Encoding is known -- everything should be good
+    if resp.response_encoding is not None:
+        with open(file_path, "w+", encoding=resp.encoding) as f:
+            f.write(resp.body)
+    # Encoding is not known -- use binary format (may result in data loss)
+    else:
+        with open(file_path, "w+b") as f:
+            f.write(resp.body)
 
 
 def outprint(file_path: str or None, resp: Response):

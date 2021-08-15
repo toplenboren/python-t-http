@@ -7,6 +7,10 @@ More on http on [RFC](https://tools.ietf.org/html/2616)
 
 # Requirements:
 * `Python 3.7+`
+* `progress`
+
+# Install:
+`pip install -r requirements.txt`
 
 # Usage:
 `python main.py http(s)//{host} [args]`

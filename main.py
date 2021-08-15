@@ -5,6 +5,7 @@ Main guy, gets Arguments and returns Result either printed on console or to the 
 import argparse
 from http_client.client import HttpClient
 from help import ARGUMENTS_PARSING, HELP_MISC
+from progress_bar.progress_bar import ProgressBar
 
 
 def setup_arg_parser():
@@ -53,7 +54,7 @@ def setup_arg_parser():
 def main():
     parser = setup_arg_parser()
     args = parser.parse_args()
-    client = HttpClient(vars(args))
+    client = HttpClient(vars(args), progress_bar=ProgressBar())
     client.fire()
 
 

@@ -11,6 +11,7 @@ from http_client.response import Response
 
 DEFAULT_HTTP_PORT = 80
 DEFAULT_HTTPS_PORT = 443
+DEFAULT_ENCODING = 'utf-8'
 
 
 def resolve_port(https: bool) -> int:
@@ -28,7 +29,7 @@ def setup_socket(addr: Address, request: str, timeout: int):
     s.connect((addr.host, resolve_port(https)))
     if https:
         s = ssl.wrap_socket(s)
-    s.sendall(bytes(request, encoding="utf-8"))
+    s.sendall(bytes(request, encoding=DEFAULT_ENCODING))
     s.settimeout(timeout)
 
     return s
