@@ -17,6 +17,7 @@ class HttpRequest:
         self.headers = {}
         self.body = {}
         self.method = "GET"
+        self.cookies = {}
 
     @staticmethod
     def method_is_ok(method: str):
@@ -26,6 +27,14 @@ class HttpRequest:
             raise ValueError(
                 "Method not supported, supported are: " + AVAILABLE_METHODS.__str__()
             )
+
+    @staticmethod
+    def compile_cookie_header_from_dict(cookies: dict) -> str:
+        result = ''
+        for k,v in cookies.items():
+            cookie = k + '=' + v
+            result += cookie + '; '
+        return result
 
     @staticmethod
     def compile_request_from_dict(request_props: dict) -> str:
@@ -44,7 +53,7 @@ class HttpRequest:
             body = self.compile_request_from_dict(self.body)
             arbitrary_headers["Content-Type"] = "application/json"
             arbitrary_headers["Content-Length"] = str(len(body))
-        compiled_headers_dict = {**arbitrary_headers, **self.headers}
+        compiled_headers_dict = {**arbitrary_headers, **self.headers, **{"cookie": self.compile_cookie_header_from_dict(self.cookies)}}
         headers = self.compile_request_from_dict(compiled_headers_dict)
 
         request = request_line + "\r\n" + headers + "\r\n" + body

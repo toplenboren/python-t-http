@@ -1,4 +1,3 @@
-import math
 import re
 from socket import socket, timeout
 from typing import List

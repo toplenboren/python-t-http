@@ -41,6 +41,7 @@ def outprint_to_file(file_path: str, resp: Response) -> None:
     else:
         with open(file_path, "w+b") as f:
             f.write(resp.body)
+    print('OK')
 
 
 def outprint(file_path: str or None, resp: Response):

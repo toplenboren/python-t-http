@@ -48,6 +48,12 @@ def setup_arg_parser():
         action=store_dict_key_pair,
         help=ARGUMENTS_PARSING["header"],
     )
+    parser.add_argument(
+        "-cookies",
+        metavar="-c",
+        action=store_dict_key_pair,
+        help=ARGUMENTS_PARSING["cookies"],
+    )
     return parser
 
 

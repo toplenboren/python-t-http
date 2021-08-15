@@ -11,6 +11,8 @@ ARGUMENTS_PARSING = {
     " supports only JSON-like format, use like this: arg=value,arg2=value2",
     "header": "Custom headers for request,"
     " supports only JSON-like format, use like this: arg=value,arg2=value2",
+    "cookies": "Custom cookies for request,"
+    " supports only JSON-like format, use like this: arg=value,arg2=value2",
 }
 
 HELP_MISC = {"description": "Fetch them"}

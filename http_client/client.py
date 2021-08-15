@@ -25,6 +25,8 @@ class HttpClient:
             self.rq.body = kwargs["body"]
         if is_valid("headers"):
             self.rq.headers = kwargs["headers"]
+        if is_valid("cookies"):
+            self.rq.cookies = kwargs["cookies"]
 
     def fire(self):
         """
